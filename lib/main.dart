@@ -9,18 +9,6 @@ void main() {
   runApp(const MyApp());
 }
 
-//Create UI
-//Refresh Indicator
-//Api Get Posts
-//Show Details
-//Create Search
-//Use DI
-//Use GetX
-
-/// Create Pagination
-/// Create Animation
-/// Unit Testing
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

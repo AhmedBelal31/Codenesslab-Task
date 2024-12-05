@@ -1,26 +1,54 @@
-import 'package:codenesslab_task/core/utils/constants/app_constant.dart';
 import 'package:flutter/material.dart';
-import '../../../data/models/posts_model.dart';
+import '../../view_models/posts_controller.dart';
 import 'posts_list_view_item.dart';
 
-class PostsListView extends StatelessWidget {
-  const PostsListView({super.key, required this.posts});
+class PostsListView extends StatefulWidget {
+  const PostsListView({super.key, required this.postsController});
 
-  final List<PostModel> posts;
+  final PostsController postsController;
+
+  @override
+  State<PostsListView> createState() => _PostsListViewState();
+}
+
+class _PostsListViewState extends State<PostsListView> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.8) {
+      setState(() {
+        //print('load more');
+        widget.postsController.loadMore();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      controller: _scrollController,
       physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) => Padding(
-        padding: const EdgeInsets.symmetric(
-            vertical: AppConstants.kDefaultPadding / 2),
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: PostsListViewItem(
           index: index + 1,
-          post: posts[index],
+          post: widget.postsController.filteredPosts[index],
         ),
       ),
-      itemCount: posts.length,
+      itemCount: widget.postsController.filteredPosts.length,
     );
   }
 }

@@ -1,3 +1,4 @@
+
 import 'package:get/get.dart';
 import '../../data/models/posts_model.dart';
 import '../../data/repos/posts_repo_impl.dart';
@@ -13,6 +14,8 @@ class PostsController extends GetxController {
   var filteredPosts = <PostModel>[].obs;
   var state = PostsState.initial.obs;
   var errorMessage = ''.obs;
+  int currentPage = 1;
+  final int postsPerPage = 10;
 
   @override
   void onInit() {
@@ -25,7 +28,7 @@ class PostsController extends GetxController {
     state.value = PostsState.loading;
 
     final result = await postsRepo.getAllPosts();
-
+    print(result);
     result.fold(
       (failure) {
         state.value = PostsState.error;
@@ -35,8 +38,7 @@ class PostsController extends GetxController {
         posts.value = data;
 
         posts.shuffle();
-
-        filteredPosts.value = [];
+        loadMore(initialLoad: true);
         state.value = PostsState.loaded;
       },
     );
@@ -58,6 +60,17 @@ class PostsController extends GetxController {
           state.value = PostsState.loaded;
         },
       );
+    }
+  }
+
+  void loadMore({bool initialLoad = false}) {
+    if (initialLoad) {
+      filteredPosts.value = posts.take(postsPerPage).toList();
+    } else {
+      int nextItems = (currentPage + 1) * postsPerPage;
+      if (nextItems > posts.length) nextItems = posts.length;
+      filteredPosts.value = posts.take(nextItems).toList();
+      currentPage++;
     }
   }
 
