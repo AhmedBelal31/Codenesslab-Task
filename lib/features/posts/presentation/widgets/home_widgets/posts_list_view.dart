@@ -30,7 +30,7 @@ class _PostsListViewState extends State<PostsListView> {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent * 0.8) {
       setState(() {
-        //print('load more');
+        debugPrint('load more');
         widget.postsController.loadMore();
       });
     }

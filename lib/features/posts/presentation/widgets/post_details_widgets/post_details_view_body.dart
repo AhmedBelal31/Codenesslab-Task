@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:animate_do/animate_do.dart'; // استيراد حزمة animate_do
+import 'package:animate_do/animate_do.dart';
 import '../../../../../core/utils/constants/app_constant.dart';
 import '../../../../../core/utils/theme/app_text_styles.dart';
 import '../../../../../core/widgets/page_bg_decoration.dart';

@@ -1,4 +1,3 @@
-
 import 'package:get/get.dart';
 import '../../data/models/posts_model.dart';
 import '../../data/repos/posts_repo_impl.dart';
@@ -12,6 +11,7 @@ class PostsController extends GetxController {
 
   var posts = <PostModel>[].obs;
   var filteredPosts = <PostModel>[].obs;
+  var searchResults = <PostModel>[].obs;
   var state = PostsState.initial.obs;
   var errorMessage = ''.obs;
   int currentPage = 1;
@@ -21,14 +21,15 @@ class PostsController extends GetxController {
   void onInit() {
     super.onInit();
     fetchPosts();
-    filteredPosts.value = [];
   }
 
-  Future<void> fetchPosts() async {
+  Future<void> fetchPosts({bool refresh = false}) async {
+    if (refresh) {
+      currentPage = 1;
+    }
     state.value = PostsState.loading;
 
     final result = await postsRepo.getAllPosts();
-    print(result);
     result.fold(
       (failure) {
         state.value = PostsState.error;
@@ -36,8 +37,10 @@ class PostsController extends GetxController {
       },
       (data) {
         posts.value = data;
-
         posts.shuffle();
+        if (refresh || filteredPosts.isEmpty) {
+          filteredPosts.value = posts.take(postsPerPage).toList();
+        }
         loadMore(initialLoad: true);
         state.value = PostsState.loaded;
       },
@@ -46,7 +49,7 @@ class PostsController extends GetxController {
 
   void searchPosts(String query) async {
     if (query.isEmpty) {
-      filteredPosts.value = [];
+      searchResults.clear();
     } else {
       state.value = PostsState.loading;
       final result = await postsRepo.searchPosts(query);
@@ -56,7 +59,7 @@ class PostsController extends GetxController {
           errorMessage.value = failure.errorMessage;
         },
         (data) {
-          filteredPosts.value = data;
+          searchResults.value = data;
           state.value = PostsState.loaded;
         },
       );
@@ -75,6 +78,6 @@ class PostsController extends GetxController {
   }
 
   void resetSearch() {
-    filteredPosts.value = [];
+    filteredPosts.value = posts.toList();
   }
 }
