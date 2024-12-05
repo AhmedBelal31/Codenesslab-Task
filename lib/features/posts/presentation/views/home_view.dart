@@ -19,9 +19,6 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     postsController.resetSearch();
     return Scaffold(
-      appBar: AppBar(
-
-      ),
       body: Container(
         decoration: buildPageBGDecoration(),
         child: Padding(
@@ -68,11 +65,17 @@ class HomeView extends StatelessWidget {
   Widget buildHomeAppBar() {
     return Row(
       children: [
-        Text(
+        const Text(
           'Posts',
-          style: TextStyles.textStyle20Weight700.copyWith(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+          ),
         ),
-        const Spacer(),
+        const Expanded(
+          child: SizedBox(),
+        ),
         IconButton(
           icon: const Icon(
             Icons.search_outlined,
