@@ -19,6 +19,9 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     postsController.resetSearch();
     return Scaffold(
+      appBar: AppBar(
+
+      ),
       body: Container(
         decoration: buildPageBGDecoration(),
         child: Padding(

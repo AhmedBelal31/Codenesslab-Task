@@ -7,20 +7,6 @@ class ApiService {
 
   ApiService(this._dio);
 
-  // static late Dio _dio;
-  // static init() {
-  //    _dio = Dio(
-  //     BaseOptions(
-  //       baseUrl:'https://www.googleapis.com/books/v1/',
-  //         receiveDataWhenStatusError: true ,
-  //         headers: {
-  //           "Content-Type" : "application/json" ,
-  //           "lang" : "en" ,
-  //         }
-  //     ),
-  //   );
-  // }
-
   Future<dynamic> getData({
     required String endPoint,
     Map<String, dynamic>? query,
